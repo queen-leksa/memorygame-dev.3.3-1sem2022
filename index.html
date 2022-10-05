@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory game</title>
+    <script src="images.js"></script>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            height: 70px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+            border: 1px solid;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .card.active {
+            background-color: lightsalmon;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 50px);
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="board"></div>
+    <script>
+        function setCnt(length) {
+            let n = getNumber(img.length);
+            if (n < 2) {
+                return setCnt(length);
+            }
+            return n;
+        }
+        let cnt = setCnt(img.length);
+        let game = [];
+        function setImg(img, arr) {
+            if (arr.filter(el => el === img).length === 0) {
+                arr.push(img);
+                arr.push(img);
+            }
+            return arr.length / 2;
+        }
+        let n = 0;
+        while (n < cnt) {
+            n = setImg(img[getNumber(img.length)], game);
+        }
+        game.sort(() => Math.random() - 0.5);
+        const board = document.querySelector(".board");
+        switch (true) {
+            case cnt % 4 === 0:
+                board.style.gridTemplateColumns = `repeat(4, 50px)`; break;
+            case cnt % 5 === 0:
+                board.style.gridTemplateColumns = `repeat(5, 50px)`; break;
+            case cnt % 6 === 0 || cnt === 9:
+                board.style.gridTemplateColumns = `repeat(6, 50px)`; break;
+            case cnt % 7 === 0:
+                board.style.gridTemplateColumns = `repeat(7, 50px)`; break;
+            case cnt % 3 === 0:
+                board.style.gridTemplateColumns = `repeat(3, 50px)`; break;
+            case cnt % 2 === 0:
+                board.style.gridTemplateColumns = `repeat(2, 50px)`; break;
+        }
+        for (let i = 0; i < game.length; i++) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.style.backgroundImage = `url("${game[i]}")`;
+            card.dataset.val = game[i].split("/")[1].split(".")[0];
+            card.addEventListener("click", e => {
+                e.target.classList.add("active");
+            });
+            board.append(card);
+        }
+        /*
+        * 1)
+        * Случайно выбиралось число от 2 до 12 (max)
+        * Случайно выбиралось заданное количество картинок (не повторяются)
+        * Каждой картинки должно быть - 2 шт.
+        * Массив с картинками перемешивается и отображается
+        * 2)
+        * При нажатии на 1 картинку - она становится активной
+        * При нажатии на 2 картинку - сравниваются обе картинки и удаляются, если они похожи.
+        * Иначе - она очищаются (active - удаляется)
+        * */
+    </script>
+</body>
+</html>
